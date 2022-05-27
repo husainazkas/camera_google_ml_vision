@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:camera_google_ml_vision/camera_google_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
@@ -57,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
           onResult: (faces) {
-            if (faces == null || faces.isEmpty || !mounted) {
+            if (faces.isEmpty || !mounted) {
               return;
             }
             setState(() {

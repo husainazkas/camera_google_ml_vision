@@ -1,23 +1,21 @@
 library camera_google_ml_vision;
 
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:camera/camera.dart';
 import 'package:collection/collection.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_ml_vision/google_ml_vision.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+
 export 'package:camera/camera.dart';
 
 part 'utils.dart';
-
 
 typedef HandleDetection<T> = Future<T> Function(GoogleVisionImage image);
 typedef ErrorWidgetBuilder = Widget Function(
@@ -77,7 +75,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _initialize();
   }
 
@@ -170,7 +168,9 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
 
   Future<XFile> takePicture(String path) async {
     await _stop(true);
+    await Future.delayed(Duration(milliseconds: 400));
     final image = await _cameraController!.takePicture();
+    await Future.delayed(Duration(milliseconds: 400));
     _start();
     return image;
   }
@@ -207,7 +207,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
     if (Platform.isAndroid) {
       final deviceInfo = DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
-      if (androidInfo.version.sdkInt < 21) {
+      if (androidInfo.version.sdkInt! < 21) {
         debugPrint('Camera plugin doesn\'t support android under version 21');
         if (mounted) {
           setState(() {
@@ -228,7 +228,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
     }
     if (_cameraController != null) {
       await _stop(true);
-      await _cameraController?.dispose();
+      await _cameraController!.dispose();
     }
     _cameraController = CameraController(
       description,
@@ -280,6 +280,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
       });
     }
 
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

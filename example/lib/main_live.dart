@@ -47,8 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             detector: detector.detectInImage,
             resolution: ResolutionPreset.high,
             onResult: (barcodes) {
-              if (barcodes == null ||
-                  barcodes.isEmpty ||
+              if (barcodes.isEmpty ||
                   data.contains(barcodes.first.displayValue) ||
                   !mounted) {
                 return;

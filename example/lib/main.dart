@@ -102,7 +102,6 @@ class _ScanPageState extends State<ScanPage> {
             onResult: (List<Barcode> barcodes) {
               if (!mounted ||
                   resultSent ||
-                  barcodes == null ||
                   barcodes.isEmpty) {
                 return;
               }
