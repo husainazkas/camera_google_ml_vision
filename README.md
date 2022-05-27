@@ -15,6 +15,15 @@ dependencies:
     git:
       url: git://github.com/husainazkas/camera_google_ml_vision.git
 ```
+or
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  camera_google_ml_vision:
+    git: https://github.com/husainazkas/camera_google_ml_vision.git
+```
 
 Android
 Change the minimum Android sdk version to 21 (or higher) in your android/app/build.gradle file.
