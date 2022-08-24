@@ -44,13 +44,13 @@ class _MyHomePageState extends State<MyHomePage> {
             detector: detector.detectInImage,
             resolution: ResolutionPreset.high,
             onResult: (barcodes) {
-              if (barcodes.isEmpty ||
-                  data.contains(barcodes.first.displayValue) ||
+              if ((barcodes?.isEmpty ?? true) ||
+                  data.contains(barcodes?.first.displayValue) ||
                   !mounted) {
                 return;
               }
               setState(() {
-                data.add(barcodes.first.displayValue.toString());
+                data.add(barcodes!.first.displayValue.toString());
               });
             },
             onDispose: () {

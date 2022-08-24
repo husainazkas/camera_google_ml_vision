@@ -13,13 +13,13 @@ import 'utils.dart';
 
 class CameraMlVision<T> extends StatefulWidget {
   final HandleDetection<T> detector;
-  final Function(T) onResult;
+  final ValueChanged<T?> onResult;
   final WidgetBuilder? loadingBuilder;
   final ErrorWidgetBuilder? errorBuilder;
   final WidgetBuilder? overlayBuilder;
   final CameraLensDirection cameraLensDirection;
   final ResolutionPreset? resolution;
-  final Function? onDispose;
+  final VoidCallback? onDispose;
 
   CameraMlVision({
     Key? key,
@@ -98,7 +98,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
         await _cameraController!.stopImageStream().catchError((_) {});
       }
 
-      if (silently) {
+      if (silently || !mounted) {
         _isStreaming = false;
       } else {
         setState(() {
@@ -110,17 +110,16 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
     return completer.future;
   }
 
-  void start() {
-    if (_cameraController != null) {
-      _start();
-    }
-  }
+  Future<void> start() =>
+      Future.value(_cameraController != null ? _start() : null);
 
-  void _start() {
-    _cameraController!.startImageStream(_processImage);
-    setState(() {
+  Future<void> _start() async {
+    await _cameraController!.startImageStream(_processImage);
+    if (mounted) {
+      setState(() => _isStreaming = true);
+    } else {
       _isStreaming = true;
-    });
+    }
   }
 
   CameraValue? get cameraValue => _cameraController?.value;
@@ -131,13 +130,18 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
       _cameraController!.prepareForVideoRecording;
 
   Future<void> startVideoRecording() async {
-    await _cameraController!.stopImageStream();
+    if (_cameraController!.value.isStreamingImages) {
+      await _cameraController!.stopImageStream();
+    }
     return _cameraController!.startVideoRecording();
   }
 
-  Future<XFile> stopVideoRecording(String path) async {
-    final file = await _cameraController!.stopVideoRecording();
-    await _cameraController!.startImageStream(_processImage);
+  Future<XFile?> stopVideoRecording(String path) async {
+    XFile? file;
+    try {
+      file = await _cameraController!.stopVideoRecording();
+      await _cameraController!.startImageStream(_processImage);
+    } on CameraException catch (_) {}
     return file;
   }
 
@@ -334,6 +338,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
         widget.onResult(results);
       } catch (ex, stack) {
         debugPrint('$ex, $stack');
+        widget.onResult(null);
       }
       _alreadyCheckingImage = false;
     }

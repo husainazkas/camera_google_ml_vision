@@ -55,11 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
           onResult: (faces) {
-            if (faces.isEmpty || !mounted) {
+            if ((faces?.isEmpty ?? true) || !mounted) {
               return;
             }
             setState(() {
-              _faces = [...faces];
+              _faces = [...faces!];
             });
           },
           onDispose: () {

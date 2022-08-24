@@ -96,12 +96,12 @@ class _ScanPageState extends State<ScanPage> {
               );
             },
             detector: detector.detectInImage,
-            onResult: (List<Barcode> barcodes) {
-              if (!mounted || resultSent || barcodes.isEmpty) {
+            onResult: (List<Barcode>? barcodes) {
+              if (!mounted || resultSent || (barcodes?.isEmpty ?? true)) {
                 return;
               }
               resultSent = true;
-              Navigator.of(context).pop<Barcode>(barcodes.first);
+              Navigator.of(context).pop<Barcode>(barcodes!.first);
             },
             onDispose: () {
               detector.close();
