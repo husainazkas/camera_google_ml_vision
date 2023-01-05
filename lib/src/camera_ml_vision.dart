@@ -188,7 +188,7 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>>
     if (Platform.isAndroid) {
       final deviceInfo = DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
-      if (androidInfo.version.sdkInt < 21) {
+      if (androidInfo.version.sdkInt! < 21) {
         debugPrint('Camera plugin doesn\'t support android under version 21');
         if (mounted) {
           setState(() {
