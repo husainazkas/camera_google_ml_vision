@@ -1,21 +1,23 @@
 name: camera_google_ml_vision
 description: A flutter widget that show the camera stream and allow ML vision recognition on it, it allow you to detect barcodes, labels, text, faces...
+publish_to: none
 
-version: 2.0.0+2
+version: 3.0.0
 homepage: https://github.com/mohanad87m/camera_google_ml_vision
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  google_ml_vision: ^0.0.7
-  visibility_detector: ^0.3.3
-  device_info_plus: ^3.2.4
-  camera: ^0.10.1
+  google_ml_vision:
+    git: https://github.com/lvlrSajjad/flutter_google_ml_vision.git
+  visibility_detector: ^0.4.0+2
+  device_info_plus: ^9.0.2
+  camera: ^0.10.5+2
   collection: ^1.16.0
 
 dev_dependencies:
